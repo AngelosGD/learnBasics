@@ -48,11 +48,8 @@ src-tauri/
 - Strict mode: `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch` all enabled
 - Target ES2020, JSX react-jsx, bundler module resolution
 
-## Learning context (tutorial in progress)
+## Learning project notes
 
-This repo is a learning project. Topics covered so far:
-1. Basic invoke (Rust → front)
-2. Complex data with serde (structs as command params)
-3. Events (Rust → front via `emit` / `listen`)
-- `referencia.md` at repo root has a concept reference
-- The user prefers to write code themselves after seeing examples; do not write code unless asked
+- Tutorial in progress; `src-tauri/src/lib.rs` has incomplete/broken code (missing semicolons, empty function bodies, unregistered commands like `mandarMensaje`). Build errors are expected — do not treat them as regressions.
+- `referencia.md` at repo root has a concept reference for invoke, serde, and events.
+- The user prefers to write code themselves after seeing examples; do not write code unless asked.

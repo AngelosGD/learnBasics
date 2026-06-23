@@ -1,6 +1,8 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use serde::{Deserialize, Serialize};
-use tauri::AppHandle
+use tauri::{AppHandle, Emitter};
+
+
 
 #[tauri::command]
 fn sumar(a: i32, b: i32) -> i32{
@@ -41,13 +43,16 @@ fn crear_humano(humano: Humano) -> Humano{
 fn registrar(usuario: Usuario) -> String{
     format!("Usuario registrado: {} - {} - {}", usuario.nombre, usuario.email, usuario.password)
 }
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 struct Mensaje{
     contenido: String,
 }
 
 #[tauri::command]
-fn mandarMensaje(mensaje: Mensaje)
+fn mandarMensaje(appHandle: AppHandle, mensaje: Mensaje) -> String {
+    appHandle.emit("mensae-recibido", &mensaje).unwrap();
+    format!("mensaje enviado {}", mensaje.contenido)
+}
 
 
 
@@ -58,7 +63,7 @@ fn mandarMensaje(mensaje: Mensaje)
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![sumar, num1, num2, registrar, crear_humano])
+        .invoke_handler(tauri::generate_handler![sumar, num1, num2, registrar, crear_humano, mandarMensaje])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
