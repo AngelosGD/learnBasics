@@ -12,17 +12,15 @@ Tauri v2 desktop app: React 19 + TypeScript frontend, Rust backend.
 ## Commands
 
 ```bash
-# Development (starts Vite + Rust sidecar, Vite on port 1420)
-npm run tauri dev
-
-# Build for production
-npm run tauri build
-
-# Frontend only (no Rust)
-npm run dev          # Vite dev server
-npm run build        # tsc + vite build
-npm run preview      # preview built frontend
+npm run tauri dev     # Development (Vite + Rust sidecar, Vite on port 1420)
+npm run tauri build   # Production build
+npm run dev           # Frontend only: Vite dev server
+npm run build         # Frontend only: tsc + vite build
+npm run preview       # Preview built frontend
 ```
+
+- `npm run tauri` is a convenience alias for `npx tauri`.
+- Vite ignores `src-tauri/**` from its file watcher; Rust changes won't trigger HMR.
 
 There is no test, lint, or formatter configured.
 
@@ -49,3 +47,12 @@ src-tauri/
 
 - Strict mode: `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch` all enabled
 - Target ES2020, JSX react-jsx, bundler module resolution
+
+## Learning context (tutorial in progress)
+
+This repo is a learning project. Topics covered so far:
+1. Basic invoke (Rust → front)
+2. Complex data with serde (structs as command params)
+3. Events (Rust → front via `emit` / `listen`)
+- `referencia.md` at repo root has a concept reference
+- The user prefers to write code themselves after seeing examples; do not write code unless asked
