@@ -1,5 +1,6 @@
 import "./App.css";
 import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 
 const sum = () => {
   const num1 = document.getElementById("num1") as HTMLInputElement;
@@ -24,17 +25,21 @@ const crearHuman = () => {
   const email = document.getElementById("emailHumano") as HTMLInputElement;
   const nombre = document.getElementById("nombreHumano") as HTMLInputElement;
 
-  const humanoCreado = invoke("crear_humano",{humano: {
-    edad: parseInt(edad.value),
-    email: email.value,
-    nombre: nombre.value,
-  }});
+  const humanoCreado = invoke("crear_humano", {
+    humano: {
+      edad: parseInt(edad.value),
+      email: email.value,
+      nombre: nombre.value,
+    },
+  });
 
-  const humanoElement = document.getElementById("humanoCreado") as HTMLParagraphElement
+  const humanoElement = document.getElementById(
+    "humanoCreado",
+  ) as HTMLParagraphElement;
 
-  humanoCreado.then((result) =>{
-    humanoElement.innerHTML = JSON.stringify(result)
-  })
+  humanoCreado.then((result) => {
+    humanoElement.innerHTML = JSON.stringify(result);
+  });
 };
 
 const usuario = {
@@ -45,6 +50,16 @@ const usuario = {
 
 invoke("registrar", { usuario }).then((result) => console.log(result));
 
+listen("mensaje-recibido", (event) => {
+  const el = document.getElementById("mensaje") as HTMLParagraphElement;
+  el.textContent = `Recibido: ${event.payload.contenido}`;
+});
+
+const enviarMensaje = () => {
+  const input = document.getElementById("msgInput") as HTMLInputElement;
+  invoke("mandarMensaje", { mensaje: { contenido: input.value } });
+};
+
 function App() {
   return (
     <main className="container">
@@ -52,7 +67,6 @@ function App() {
         <input type="number" id="num1"></input>
         <input type="number" id="num2"></input>
         <button onClick={sum}>Sumar</button>
-
         <p id="resultado"></p>
         <br />
         <input type="number" placeholder="edad" id="edadHumano" />
@@ -60,10 +74,12 @@ function App() {
         <input type="text " placeholder="email" id="emailHumano" />
         <br />
         <input type="text " placeholder="nombre" id="nombreHumano" />
-
         <button onClick={crearHuman}>crea humano</button>
-
         <p id="humanoCreado"></p>
+
+        <input type="text" id="msgInput" />
+        <button onClick={enviarMensaje}>enviar</button>
+        <p id="mensaje"></p>
       </div>
     </main>
   );
